@@ -6,9 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.ludovic.vimont.data.model.Album
 
-/**
- * Handle the creation of the database by extending RoomDatabase.
- */
 @Database(entities = [Album::class], version = 1)
 abstract class AlbumDatabase: RoomDatabase() {
     companion object {
