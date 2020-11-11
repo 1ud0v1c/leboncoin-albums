@@ -26,8 +26,12 @@ class AlbumRepositoryImpl(private val albumAPI: AlbumAPI,
                 return StateData.error(exception.message.toString())
             }
         } else {
-            val cachedAlbums: List<Album> = albumDao.getAll().asEntity()
-            return StateData.success(cachedAlbums)
+            return try {
+                val cachedAlbums: List<Album> = albumDao.getAll().asEntity()
+                StateData.success(cachedAlbums)
+            }  catch (exception: Exception) {
+                StateData.error(exception.message.toString())
+            }
         }
     }
 

@@ -13,7 +13,7 @@ object AlbumMockHelper {
         return albumsList
     }
 
-    fun buildAlbum(id: Int): Album {
+    private fun buildAlbum(id: Int): Album {
         return Album(
             id,
             42,
