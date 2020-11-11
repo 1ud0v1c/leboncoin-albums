@@ -7,7 +7,7 @@ import com.ludovic.vimont.domain.repositories.AlbumRepository
 class LoadAlbumUseCase(
     private val albumRepository: AlbumRepository
 ): UseCase<Int, StateData<Album>> {
-    override fun execute(input: Int): StateData<Album> {
+    override suspend fun execute(input: Int): StateData<Album> {
         return albumRepository.getAlbum(input)
     }
 }

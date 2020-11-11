@@ -5,6 +5,7 @@ import com.ludovic.vimont.domain.common.DataStatus
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.usecases.LoadAlbumUseCase
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -19,7 +20,7 @@ class LoadAlbumUseCaseTest {
     }
 
     @Test
-    fun testGetAlbum() {
+    fun testGetAlbum() = runBlocking {
         val result: StateData<Album> = loadAlbumUseCase.execute(1)
         Assert.assertEquals(DataStatus.SUCCESS, result.status)
         Assert.assertEquals(1, result.data?.id)
