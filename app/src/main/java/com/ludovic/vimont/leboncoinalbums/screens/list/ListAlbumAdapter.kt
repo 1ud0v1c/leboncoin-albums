@@ -7,11 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.leboncoinalbums.R
 
 class ListAlbumAdapter(private val albums: ArrayList<Album>): RecyclerView.Adapter<ListAlbumAdapter.AlbumViewHolder>() {
+    var onItemClick: ((Int) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumViewHolder {
         val itemView: View = LayoutInflater.from(parent.context).inflate(R.layout.item_album, parent, false)
         return AlbumViewHolder(itemView)
@@ -21,7 +22,11 @@ class ListAlbumAdapter(private val albums: ArrayList<Album>): RecyclerView.Adapt
         val album: Album = albums[position]
         holder.textViewTitle.text = album.title
         holder.imageViewPhoto.load(album.thumbnailUrl) {
+            crossfade(true)
             placeholder(R.drawable.album_default_cover)
+        }
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(album.id)
         }
     }
 

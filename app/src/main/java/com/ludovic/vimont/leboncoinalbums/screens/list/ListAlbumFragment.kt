@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.ludovic.vimont.domain.common.DataStatus
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
+import com.ludovic.vimont.leboncoinalbums.R
 import com.ludovic.vimont.leboncoinalbums.databinding.FragmentListAlbumsBinding
+import com.ludovic.vimont.leboncoinalbums.screens.detail.DetailFragment
 
 class ListAlbumFragment: Fragment() {
     companion object {
@@ -36,6 +38,14 @@ class ListAlbumFragment: Fragment() {
         with(binding) {
             recyclerView.layoutManager = GridLayoutManager(context, 2)
             recyclerView.adapter = adapter
+            adapter.onItemClick = { albumId: Int ->
+                activity?.let {
+                    val detailFragment: Fragment = DetailFragment.newInstance(it, albumId)
+                    it.supportFragmentManager.beginTransaction()
+                        .add(R.id.constraint_layout_container, detailFragment)
+                        .commitNow()
+                }
+            }
         }
 
         if (savedInstanceState == null) {
@@ -43,6 +53,9 @@ class ListAlbumFragment: Fragment() {
         }
         viewModel.albums.observe(viewLifecycleOwner, { result: StateData<List<Album>> ->
             when (result.status) {
+                DataStatus.LOADING -> {
+                    println("Loading...")
+                }
                 DataStatus.SUCCESS -> {
                     result.data?.let { adapter.addItems(it) }
                 }

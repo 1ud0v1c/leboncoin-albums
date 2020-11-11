@@ -21,4 +21,14 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
     }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.fragments.size > 1) {
+            supportFragmentManager.beginTransaction()
+                .remove(supportFragmentManager.fragments.last())
+                .commitNow()
+        } else {
+            super.onBackPressed()
+        }
+    }
 }

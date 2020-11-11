@@ -57,7 +57,7 @@ dependencies {
     // ViewModel
     implementation 'androidx.fragment:fragment-ktx:1.2.5'
 
-    // Glide for Image loading
+    // Coil for Image loading
     implementation "io.coil-kt:coil:1.0.0"
 
     // Koin for DI

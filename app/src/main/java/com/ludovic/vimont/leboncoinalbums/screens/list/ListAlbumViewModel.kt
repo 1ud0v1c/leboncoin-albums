@@ -17,6 +17,7 @@ class ListAlbumViewModel: ViewModel(), KoinComponent {
 
     fun loadAlbums() {
         viewModelScope.launch(Dispatchers.Default) {
+            albums.postValue(StateData.loading())
             val result: StateData<List<Album>> = loadAlbumsListUseCase.execute(false)
             albums.postValue(result)
         }

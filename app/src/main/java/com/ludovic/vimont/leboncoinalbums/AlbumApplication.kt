@@ -5,6 +5,7 @@ import com.ludovic.vimont.data.db.AlbumDatabase
 import com.ludovic.vimont.data.network.AlbumAPI
 import com.ludovic.vimont.data.network.RetrofitBuilder
 import com.ludovic.vimont.data.source.AlbumRepositoryImpl
+import com.ludovic.vimont.domain.usecases.LoadAlbumUseCase
 import com.ludovic.vimont.domain.usecases.LoadAlbumsListUseCase
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -33,7 +34,13 @@ class AlbumApplication: Application() {
                 AlbumDatabase.buildDatabase(androidContext()).albumDao()
             }
             single {
-                LoadAlbumsListUseCase(AlbumRepositoryImpl(get(), get()))
+                AlbumRepositoryImpl(get(), get())
+            }
+            single {
+                LoadAlbumsListUseCase(get<AlbumRepositoryImpl>())
+            }
+            single {
+                LoadAlbumUseCase(get<AlbumRepositoryImpl>())
             }
         }
     }
