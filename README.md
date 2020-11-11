@@ -9,12 +9,12 @@ Parsing of a Json flux to display a list of albums using clean architecture &amp
 
 ## Architecture
 
-For this test, I tried to use a |clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) following [this example](https://fernandocejas.com/2018/05/07/architecting-android-reloaded/).
-The main objective is to be able to have a great separation of concerns and thus improve the testability of the code. To do so, I have fractionned this project in 3 layers :
+For this test, I tried to use a [clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) following [this example](https://fernandocejas.com/2018/05/07/architecting-android-reloaded/).
+The main objective is to be able to have a great separation of concerns and thus improve the testability of the code. To do so, I have divided this project in 3 layers :
 
-- Domain Layer: The domain package, which is responsible for handling pure Business Logic and defining Entities representing our business models.
-- Data Layer: The Data modules will implement the interfaces defined in the Domain layer.
-- Presentation Layer: The presentation module will contain our activities/fragments. For the presentation layer I used an [MVVM architecture](https://developer.android.com/jetpack/guide).
+- **Domain Layer**: The domain package, which is responsible for handling pure Business Logic and defining Entities representing our business models.
+- **Data Layer**: The Data modules will implement the interfaces defined in the Domain layer.
+- **Presentation Layer**: The presentation module will contain our activities/fragments. For the presentation layer I used an [MVVM architecture](https://developer.android.com/jetpack/guide).
 
 
 ## External dependencies
