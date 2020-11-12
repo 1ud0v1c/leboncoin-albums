@@ -9,9 +9,9 @@ Parsing of a Json flux to display a list of albums using clean architecture &amp
 
 ## Design
 
-The main inspiration for my application comes from the design of [Shakib Ali](https://www.behance.net/Shakibali) intituled [Workout & Fitness App](/101104737/Workout-Fitness-App?tracking_source=search_projects_recommended|application mobile gallery).
+The main inspiration for my application comes from the design of [Shakib Ali](https://www.behance.net/Shakibali) intituled [Workout & Fitness App](https://www.behance.net/gallery/101104737/Workout-Fitness-App?tracking_source=search_projects_recommended%7Capplication%20mobile%20gallery).
 I really liked the listing page so I tried to reproduce it.
- 
+
  I also had inspiration from the two following designs :
 - [Planet of events design mobile app](https://www.behance.net/gallery/95407439/Planet-of-events-design-mobile-app-UXUI?tracking_source=search_projects_recommended%7Capplication%20mobile%20gallery) from [Vadim Bondarenko](https://www.behance.net/Despro) and [Yakovlevv Design](https://www.behance.net/yakovlevv).
 - [Culttrip](https://www.behance.net/gallery/88746691/Culttrip?tracking_source=search_projects_recommended%7Capplication%20mobile%20gallery) from [UGEM Design](https://www.behance.net/ugem)
