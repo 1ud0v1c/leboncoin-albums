@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.leboncoinalbums.R
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ListAlbumAdapter(private val albums: ArrayList<Album>): RecyclerView.Adapter<ListAlbumAdapter.AlbumViewHolder>() {
     var onItemClick: ((Int) -> Unit)? = null
@@ -20,7 +22,7 @@ class ListAlbumAdapter(private val albums: ArrayList<Album>): RecyclerView.Adapt
 
     override fun onBindViewHolder(holder: AlbumViewHolder, position: Int) {
         val album: Album = albums[position]
-        holder.textViewTitle.text = album.title
+        holder.textViewTitle.text = album.title.capitalize(Locale.getDefault()).trim()
         holder.imageViewPhoto.load(album.thumbnailUrl) {
             crossfade(true)
             placeholder(R.drawable.album_default_cover)

@@ -14,6 +14,7 @@ import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.leboncoinalbums.R
 import com.ludovic.vimont.leboncoinalbums.databinding.FragmentDetailAlbumBinding
+import java.util.*
 
 class DetailFragment: Fragment() {
     companion object {
@@ -37,7 +38,6 @@ class DetailFragment: Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -54,7 +54,8 @@ class DetailFragment: Fragment() {
                 DataStatus.SUCCESS -> {
                     result.data?.let { album: Album ->
                         with(binding) {
-                            textViewAlbumTitle.text = album.id.toString()
+                            textViewAlbumId.text = album.id.toString()
+                            textViewAlbumTitle.text = album.title.capitalize(Locale.getDefault()).trim()
                             imageViewAlbumPhoto.load(album.url) {
                                 placeholder(R.drawable.album_default_cover)
                                 crossfade(true)

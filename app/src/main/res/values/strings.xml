@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">LeboncoinAlbums</string>
+    <string name="app_name">Leboncoin Albums</string>
+
+    <string name="main_activity_title">List of Albums</string>
+
+    <!-- List Fragment -->
+    <string name="item_album_thumbnail_content_description">Album item thumbnail content description</string>
+    <string name="item_album_image_view_action">Album item action content description</string>
+
+    <!-- Detail Fragment -->
+    <string name="detail_fragment_album_id_label">Album ID: </string>
+    <string name="detail_fragment_album_title_label">Album title: </string>
 </resources>

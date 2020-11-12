@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ludovic.vimont.domain.common.DataStatus
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
@@ -36,7 +37,7 @@ class ListAlbumFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            recyclerView.layoutManager = GridLayoutManager(context, 2)
+            recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             recyclerView.adapter = adapter
             adapter.onItemClick = { albumId: Int ->
                 activity?.let {
