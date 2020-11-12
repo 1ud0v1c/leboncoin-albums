@@ -7,6 +7,22 @@
 Parsing of a Json flux to display a list of albums using clean architecture &amp; MVVM
 
 
+## Design
+
+The main inspiration for my application comes from the design of [Shakib Ali](https://www.behance.net/Shakibali) intituled [Workout & Fitness App](/101104737/Workout-Fitness-App?tracking_source=search_projects_recommended|application mobile gallery).
+I really liked the listing page so I tried to reproduce it.
+ 
+ I also had inspiration from the two following designs :
+- [Planet of events design mobile app](https://www.behance.net/gallery/95407439/Planet-of-events-design-mobile-app-UXUI?tracking_source=search_projects_recommended%7Capplication%20mobile%20gallery) from [Vadim Bondarenko](https://www.behance.net/Despro) and [Yakovlevv Design](https://www.behance.net/yakovlevv).
+- [Culttrip](https://www.behance.net/gallery/88746691/Culttrip?tracking_source=search_projects_recommended%7Capplication%20mobile%20gallery) from [UGEM Design](https://www.behance.net/ugem)
+
+To be able to provide a great user experience when loading or when an error occurred while fetching the data, I browsed some really great projects, for example :
+- [Error Illustrations - Empty States Vol 02](https://www.behance.net/gallery/57693817/Error-Illustrations-Empty-States-Vol-02?tracking_source=search_projects_recommended%7CAndroid%20empty%20state) from [Nimasha Perera](https://www.behance.net/nimashasperera)
+- [DAY 62-empty state](https://www.behance.net/gallery/53698651/DAY-62-empty-state) from [Shangnan Zhang](https://www.behance.net/Zhangshangnan)
+
+To find the logo to display the current state of my adapter list, I used the website [Undraw](https://undraw.co/).
+
+
 ## Architecture
 
 For this test, I tried to use a [clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) following [this example](https://fernandocejas.com/2018/05/07/architecting-android-reloaded/).
