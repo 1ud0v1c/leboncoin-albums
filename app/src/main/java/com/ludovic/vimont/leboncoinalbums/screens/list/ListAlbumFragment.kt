@@ -1,46 +1,48 @@
 package com.ludovic.vimont.leboncoinalbums.screens.list
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ludovic.vimont.domain.common.DataStatus
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
+import com.ludovic.vimont.leboncoinalbums.R
 import com.ludovic.vimont.leboncoinalbums.databinding.FragmentListAlbumsBinding
+import com.ludovic.vimont.leboncoinalbums.helper.ViewHelper
 
 class ListAlbumFragment: Fragment() {
-    companion object {
-        fun newInstance(activity: Activity): Fragment {
-            return FragmentFactory.loadFragmentClass(activity.classLoader, ListAlbumFragment::class.java.name)
-                .newInstance()
-        }
-    }
     private val adapter = ListAlbumAdapter(ArrayList())
     private val viewModel: ListAlbumViewModel by viewModels()
     private lateinit var binding: FragmentListAlbumsBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentListAlbumsBinding.inflate(inflater, container, false)
+        activity?.title = getString(R.string.fragment_list_title)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        configureViews()
+        if (savedInstanceState == null) {
+            viewModel.loadAlbums()
+            setViewModelObserver()
+        }
+    }
 
+    private fun configureViews() {
         with(binding) {
-            recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            recyclerView.adapter = adapter
+            recyclerViewAlbums.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            recyclerViewAlbums.adapter = adapter
+
             adapter.onItemClick = { albumId: Int ->
                 activity?.let {
                     val action: NavDirections = ListAlbumFragmentDirections.actionListAlbumFragmentToDetailFragment(albumId)
@@ -48,22 +50,71 @@ class ListAlbumFragment: Fragment() {
                 }
             }
         }
+    }
 
-        if (savedInstanceState == null) {
-            viewModel.loadAlbums()
-        }
+    private fun setViewModelObserver() {
         viewModel.albums.observe(viewLifecycleOwner, { result: StateData<List<Album>> ->
             when (result.status) {
                 DataStatus.LOADING -> {
-                    println("Loading...")
+                    showLoadingStatus()
                 }
                 DataStatus.SUCCESS -> {
-                    result.data?.let { adapter.addItems(it) }
+                    result.data?.let {
+                        showSuccessStatus(it)
+                    }
                 }
                 DataStatus.ERROR -> {
-                    println(result.errorMessage)
+                    showErrorStatus(result.errorMessage)
                 }
             }
         })
+    }
+
+    private fun showLoadingStatus() {
+        with(binding) {
+            ViewHelper.fadeOutAnimation(recyclerViewAlbums, {
+                recyclerViewAlbums.visibility = View.GONE
+            })
+            ViewHelper.fadeInAnimation(linearLayoutStateContainer, {
+                linearLayoutStateContainer.visibility = View.VISIBLE
+            })
+            imageViewState.setImageResource(R.drawable.state_loading)
+            textViewStateTitle.text = getString(R.string.fragment_list_loading_title)
+            textViewStateDescription.text = getString(R.string.fragment_list_loading_description)
+            buttonStateAction.visibility = View.GONE
+        }
+    }
+
+    private fun showSuccessStatus(albums: List<Album>) {
+        with(binding) {
+            ViewHelper.fadeOutAnimation(linearLayoutStateContainer, {
+                linearLayoutStateContainer.visibility = View.GONE
+            })
+            ViewHelper.fadeInAnimation(recyclerViewAlbums, {
+                recyclerViewAlbums.visibility = View.VISIBLE
+            })
+            adapter.addItems(albums)
+        }
+    }
+
+
+    private fun showErrorStatus(errorMessage: String) {
+        with(binding) {
+            ViewHelper.fadeOutAnimation(recyclerViewAlbums, {
+                recyclerViewAlbums.visibility = View.GONE
+            })
+            ViewHelper.fadeInAnimation(linearLayoutStateContainer, {
+                linearLayoutStateContainer.visibility = View.VISIBLE
+            })
+            imageViewState.setImageResource(R.drawable.state_error)
+            textViewStateTitle.text = getString(R.string.fragment_list_error_title)
+            textViewStateDescription.text = errorMessage
+
+            buttonStateAction.text = getString(R.string.action_retry)
+            buttonStateAction.visibility = View.VISIBLE
+            buttonStateAction.setOnClickListener {
+                viewModel.loadAlbums()
+            }
+        }
     }
 }

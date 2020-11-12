@@ -24,8 +24,8 @@ class ListAlbumAdapter(private val albums: ArrayList<Album>): RecyclerView.Adapt
         val album: Album = albums[position]
         holder.textViewTitle.text = album.title.capitalize(Locale.getDefault()).trim()
         holder.imageViewPhoto.load(album.thumbnailUrl) {
-            crossfade(true)
             placeholder(R.drawable.album_default_cover)
+            crossfade(true)
         }
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(album.id)

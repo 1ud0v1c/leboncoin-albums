@@ -1,9 +1,19 @@
 <resources>
     <string name="app_name">Leboncoin Albums</string>
+    <string name="fragment_list_title">List of Albums</string>
+    <string name="fragment_detail_title">Detail of album: %d</string>
 
-    <string name="main_activity_title">List of Albums</string>
+    <!-- Common action -->
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_retry">Retry</string>
 
     <!-- List Fragment -->
+    <string name="fragment_list_loading_title">Loading</string>
+    <string name="fragment_list_loading_description">A request has been launched, please wait until it succeed</string>
+    <string name="fragment_list_error_title">An error occurred</string>
+    <string name="fragment_list_image_view_state_content_description">Fragment list ImageView current state</string>
+
     <string name="item_album_thumbnail_content_description">Album item thumbnail content description</string>
     <string name="item_album_image_view_action">Album item action content description</string>
 

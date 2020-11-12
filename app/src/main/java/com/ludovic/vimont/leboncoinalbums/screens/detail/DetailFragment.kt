@@ -27,32 +27,30 @@ class DetailFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         if (savedInstanceState == null) {
             viewModel.loadAlbum(args.albumId)
+            setViewModelObserver()
         }
+    }
 
+    private fun setViewModelObserver() {
         viewModel.album.observe(viewLifecycleOwner, { result: StateData<Album> ->
-            when (result.status) {
-                DataStatus.LOADING -> {
-                    println("Loading album...")
-                }
-                DataStatus.SUCCESS -> {
-                    result.data?.let { album: Album ->
-                        with(binding) {
-                            textViewAlbumId.text = album.id.toString()
-                            textViewAlbumTitle.text = album.title.capitalize(Locale.getDefault()).trim()
-                            imageViewAlbumPhoto.load(album.url) {
-                                placeholder(R.drawable.album_default_cover)
-                                crossfade(true)
-                            }
-                        }
-                    }
-                }
-                DataStatus.ERROR -> {
-                    println(result.errorMessage)
+            if (result.status == DataStatus.SUCCESS) {
+                result.data?.let { album: Album ->
+                    configureViews(album)
                 }
             }
         })
+    }
+
+    private fun configureViews(album: Album) {
+        with(binding) {
+            textViewAlbumId.text = album.id.toString()
+            textViewAlbumTitle.text = album.title.capitalize(Locale.getDefault()).trim()
+            imageViewAlbumPhoto.load(album.url) {
+                placeholder(R.drawable.album_default_cover)
+                crossfade(true)
+            }
+        }
     }
 }

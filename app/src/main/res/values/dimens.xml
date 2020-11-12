@@ -9,6 +9,11 @@
     <dimen name="activity_vertical_big_margin">24dp</dimen>
 
     <!-- List Fragment -->
+    <dimen name="detail_fragment_state_title_size">20sp</dimen>
+    <dimen name="detail_fragment_state_description_size">15sp</dimen>
+    <dimen name="detail_fragment_button_retry_border_radius">32dp</dimen>
+    <dimen name="detail_fragment_button_retry_min_width">150dp</dimen>
+
     <dimen name="item_album_card_view_corners_radius">16dp</dimen>
     <dimen name="item_album_card_view_elevation">4dp</dimen>
     <dimen name="item_album_text_view_title_size">16sp</dimen>
