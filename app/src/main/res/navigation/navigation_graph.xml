@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/listAlbumFragment">
+
+    <fragment
+        android:id="@+id/listAlbumFragment"
+        android:name="com.ludovic.vimont.leboncoinalbums.screens.list.ListAlbumFragment"
+        android:label="ListAlbumFragment">
+        <action
+            android:id="@+id/action_listAlbumFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.ludovic.vimont.leboncoinalbums.screens.detail.DetailFragment"
+        android:label="DetailFragment">
+        <argument
+            android:name="albumId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+
+</navigation>

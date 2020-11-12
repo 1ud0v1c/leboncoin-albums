@@ -5,17 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ludovic.vimont.domain.common.DataStatus
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
-import com.ludovic.vimont.leboncoinalbums.R
 import com.ludovic.vimont.leboncoinalbums.databinding.FragmentListAlbumsBinding
-import com.ludovic.vimont.leboncoinalbums.screens.detail.DetailFragment
 
 class ListAlbumFragment: Fragment() {
     companion object {
@@ -41,10 +43,8 @@ class ListAlbumFragment: Fragment() {
             recyclerView.adapter = adapter
             adapter.onItemClick = { albumId: Int ->
                 activity?.let {
-                    val detailFragment: Fragment = DetailFragment.newInstance(it, albumId)
-                    it.supportFragmentManager.beginTransaction()
-                        .add(R.id.constraint_layout_container, detailFragment)
-                        .commitNow()
+                    val action: NavDirections = ListAlbumFragmentDirections.actionListAlbumFragmentToDetailFragment(albumId)
+                    findNavController().navigate(action)
                 }
             }
         }
