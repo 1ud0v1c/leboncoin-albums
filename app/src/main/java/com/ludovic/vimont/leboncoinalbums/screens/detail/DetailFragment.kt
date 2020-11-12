@@ -37,6 +37,7 @@ class DetailFragment: Fragment() {
         viewModel.album.observe(viewLifecycleOwner, { result: StateData<Album> ->
             if (result.status == DataStatus.SUCCESS) {
                 result.data?.let { album: Album ->
+                    activity?.title = getString(R.string.fragment_detail_title, album.id)
                     configureViews(album)
                 }
             }
