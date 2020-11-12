@@ -11,9 +11,11 @@
     <!-- List Fragment -->
     <dimen name="item_album_card_view_corners_radius">16dp</dimen>
     <dimen name="item_album_card_view_elevation">4dp</dimen>
+    <dimen name="item_album_text_view_title_size">16sp</dimen>
     <dimen name="item_album_image_view_size">150dp</dimen>
     <dimen name="item_album_image_view_action_top_left_radius">16dp</dimen>
 
     <!-- Detail Fragment -->
+    <dimen name="detail_fragment_text_view_size">14sp</dimen>
     <dimen name="detail_fragment_text_view_right_margin">2dp</dimen>
 </resources>

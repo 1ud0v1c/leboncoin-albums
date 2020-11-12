@@ -9,5 +9,5 @@
 
     <!-- Detail Fragment -->
     <string name="detail_fragment_album_id_label">Album ID: </string>
-    <string name="detail_fragment_album_title_label">Album title: </string>
+    <string name="detail_fragment_album_title_label">Album Title: </string>
 </resources>
