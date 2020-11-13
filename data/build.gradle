@@ -49,6 +49,13 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
 
+    // @see: https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
+    implementation("com.squareup.okhttp3:okhttp") {
+        version {
+            strictly "3.12.12"
+        }
+    }
+
     // Room for DB
     api "androidx.room:room-runtime:2.2.5"
     kapt "androidx.room:room-compiler:2.2.5"
