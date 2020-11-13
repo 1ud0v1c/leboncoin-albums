@@ -15,9 +15,13 @@ import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.leboncoinalbums.R
 import com.ludovic.vimont.leboncoinalbums.databinding.FragmentListAlbumsBinding
 import com.ludovic.vimont.leboncoinalbums.helper.ViewHelper
+import com.ludovic.vimont.leboncoinalbums.ui.EndlessRecyclerViewScrollListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ListAlbumFragment: Fragment() {
+    companion object {
+        const val NUMBER_OF_ITEMS_PER_PAGE = 15
+    }
     private val adapter = ListAlbumAdapter(ArrayList())
     private val viewModel: ListAlbumViewModel by viewModel()
     private lateinit var binding: FragmentListAlbumsBinding
@@ -43,9 +47,15 @@ class ListAlbumFragment: Fragment() {
 
     private fun configureViews() {
         with(binding) {
-            recyclerViewAlbums.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            recyclerViewAlbums.layoutManager = layoutManager
             recyclerViewAlbums.adapter = adapter
-
+            val endlessRecyclerViewScrollListener = object: EndlessRecyclerViewScrollListener(layoutManager) {
+                override fun onLoadMore(currentPage: Int) {
+                    viewModel.loadNextPageList()
+                }
+            }
+            recyclerViewAlbums.addOnScrollListener(endlessRecyclerViewScrollListener)
             adapter.onItemClick = { albumId: Int ->
                 activity?.let {
                     val action: NavDirections = ListAlbumFragmentDirections.actionListAlbumFragmentToDetailFragment(albumId)
@@ -56,7 +66,7 @@ class ListAlbumFragment: Fragment() {
     }
 
     private fun setViewModelObserver() {
-        viewModel.albums.observe(viewLifecycleOwner, { result: StateData<List<Album>> ->
+        viewModel.albums.observe(viewLifecycleOwner) { result: StateData<List<Album>> ->
             when (result.status) {
                 DataStatus.LOADING -> {
                     showLoadingStatus()
@@ -70,7 +80,7 @@ class ListAlbumFragment: Fragment() {
                     showErrorStatus(result.errorMessage)
                 }
             }
-        })
+        }
     }
 
     private fun showLoadingStatus() {
@@ -96,10 +106,9 @@ class ListAlbumFragment: Fragment() {
             ViewHelper.fadeInAnimation(recyclerViewAlbums, {
                 recyclerViewAlbums.visibility = View.VISIBLE
             })
-            adapter.addItems(albums)
+            adapter.setItems(albums)
         }
     }
-
 
     private fun showErrorStatus(errorMessage: String) {
         with(binding) {

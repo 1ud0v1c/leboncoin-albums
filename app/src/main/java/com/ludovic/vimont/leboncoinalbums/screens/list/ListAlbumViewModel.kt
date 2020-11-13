@@ -11,6 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCase): ViewModel() {
+    private var fromIndex: Int = 0
+    private val currentAlbums = ArrayList<Album>()
     private val allAlbums = ArrayList<Album>()
     val albums = MutableLiveData<StateData<List<Album>>>()
 
@@ -19,17 +21,34 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
             if (allAlbums.isEmpty()) {
                 albums.postValue(StateData.loading())
                 val result: StateData<List<Album>> = loadAlbumsListUseCase.execute(false)
-                if (result.status == DataStatus.SUCCESS) {
-                    result.data?.let {
-                        allAlbums.addAll(it)
+                when (result.status) {
+                    DataStatus.SUCCESS -> {
+                        result.data?.let {
+                            allAlbums.addAll(it)
+                            currentAlbums.addAll(allAlbums.subList(fromIndex, ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE))
+                            albums.postValue(StateData.success(currentAlbums))
+                            fromIndex = ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE
+                        }
                     }
+                    DataStatus.ERROR -> {
+                        albums.postValue(result)
+                    }
+                    else -> { }
                 }
-                albums.postValue(result)
+            } else {
+                albums.postValue(StateData.success(currentAlbums))
             }
         }
     }
 
     fun isAlbumsNotLoaded(): Boolean {
         return allAlbums.isEmpty()
+    }
+
+    fun loadNextPageList() {
+        val newIndex: Int = fromIndex + ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE
+        currentAlbums.addAll(allAlbums.subList(fromIndex, newIndex))
+        albums.postValue(StateData.success(currentAlbums))
+        fromIndex = newIndex
     }
 }
