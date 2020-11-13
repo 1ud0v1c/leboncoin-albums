@@ -7,6 +7,8 @@ import com.ludovic.vimont.data.network.RetrofitBuilder
 import com.ludovic.vimont.data.source.AlbumRepositoryImpl
 import com.ludovic.vimont.domain.usecases.LoadAlbumUseCase
 import com.ludovic.vimont.domain.usecases.LoadAlbumsListUseCase
+import com.ludovic.vimont.leboncoinalbums.di.DataModule
+import com.ludovic.vimont.leboncoinalbums.di.ViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -16,32 +18,13 @@ class AlbumApplication: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val dataModule: Module = buildDataModule()
-
         startKoin {
             androidContext(this@AlbumApplication)
-            val listOfModule: List<Module> = listOf(dataModule)
+            val listOfModule: List<Module> = listOf(
+                DataModule.dataModule,
+                ViewModelModule.viewModelModule
+            )
             modules(listOfModule)
-        }
-    }
-
-    private fun buildDataModule(): Module {
-        return module {
-            single {
-                RetrofitBuilder.buildAPI(AlbumAPI.BASE_URL, AlbumAPI::class.java)
-            }
-            single {
-                AlbumDatabase.buildDatabase(androidContext()).albumDao()
-            }
-            single {
-                AlbumRepositoryImpl(get(), get())
-            }
-            single {
-                LoadAlbumsListUseCase(get<AlbumRepositoryImpl>())
-            }
-            single {
-                LoadAlbumUseCase(get<AlbumRepositoryImpl>())
-            }
         }
     }
 }

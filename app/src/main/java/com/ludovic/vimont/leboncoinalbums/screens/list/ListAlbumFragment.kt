@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,10 +15,11 @@ import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.leboncoinalbums.R
 import com.ludovic.vimont.leboncoinalbums.databinding.FragmentListAlbumsBinding
 import com.ludovic.vimont.leboncoinalbums.helper.ViewHelper
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ListAlbumFragment: Fragment() {
     private val adapter = ListAlbumAdapter(ArrayList())
-    private val viewModel: ListAlbumViewModel by viewModels()
+    private val viewModel: ListAlbumViewModel by viewModel()
     private lateinit var binding: FragmentListAlbumsBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

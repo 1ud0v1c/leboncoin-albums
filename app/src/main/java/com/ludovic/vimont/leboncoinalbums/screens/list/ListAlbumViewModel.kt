@@ -9,11 +9,8 @@ import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.usecases.LoadAlbumsListUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
-class ListAlbumViewModel: ViewModel(), KoinComponent {
-    private val loadAlbumsListUseCase: LoadAlbumsListUseCase by inject()
+class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCase): ViewModel() {
     private val allAlbums = ArrayList<Album>()
     val albums = MutableLiveData<StateData<List<Album>>>()
 

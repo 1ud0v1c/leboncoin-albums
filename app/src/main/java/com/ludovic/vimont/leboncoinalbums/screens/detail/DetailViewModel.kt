@@ -8,11 +8,8 @@ import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.usecases.LoadAlbumUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
-class DetailViewModel: ViewModel(), KoinComponent {
-    private val loadAlbumUseCase: LoadAlbumUseCase by inject()
+class DetailViewModel(private val loadAlbumUseCase: LoadAlbumUseCase): ViewModel() {
     val album = MutableLiveData<StateData<Album>>()
 
     fun loadAlbum(albumId: Int) {
