@@ -29,8 +29,12 @@ class DetailFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState == null) {
             viewModel.loadAlbum(args.albumId)
-            setViewModelObserver()
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setViewModelObserver()
     }
 
     private fun setViewModelObserver() {

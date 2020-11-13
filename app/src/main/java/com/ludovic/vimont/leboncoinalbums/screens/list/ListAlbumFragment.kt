@@ -31,10 +31,14 @@ class ListAlbumFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureViews()
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null && viewModel.isAlbumsNotLoaded()) {
             viewModel.loadAlbums()
-            setViewModelObserver()
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setViewModelObserver()
     }
 
     private fun configureViews() {

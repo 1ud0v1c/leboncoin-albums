@@ -28,4 +28,8 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
             }
         }
     }
+
+    fun isAlbumsNotLoaded(): Boolean {
+        return allAlbums.isEmpty()
+    }
 }
