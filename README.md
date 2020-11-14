@@ -41,3 +41,4 @@ since I saw [that talk](https://www.youtube.com/watch?time_continue=2526&v=1Pwdq
 - [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html): Light-weight thread implementation. I like the readability and the simplicity of coroutine.
 - To load image, I picked [Coil](https://github.com/coil-kt/coil), which released the 1.0 recently. I liked it, because the library is smaller than Glide & Picasso & the library is backed by Kotlin Coroutines.
 - [Koin](https://github.com/InsertKoinIO/koin): I used Koin for dependency injection.
+- I used [Barista](https://github.com/AdevintaSpain/Barista) to ease my UI tests writing.
