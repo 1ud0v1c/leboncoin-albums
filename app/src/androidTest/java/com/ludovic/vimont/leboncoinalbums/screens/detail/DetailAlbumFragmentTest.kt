@@ -1,10 +1,6 @@
 package com.ludovic.vimont.leboncoinalbums.screens.detail
 
 import android.content.pm.ActivityInfo
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.ludovic.vimont.leboncoinalbums.R

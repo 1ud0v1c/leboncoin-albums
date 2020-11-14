@@ -31,11 +31,11 @@ class FakeAlbumRepositoryImpl(albumListSize: Int = 5) : AlbumRepository {
     }
 
     override suspend fun getAlbum(albumId: Int): StateData<Album> {
-        val foundedElement: Album? = albums.find { album: Album ->
+        val foundElement: Album? = albums.find { album: Album ->
             album.id == albumId
         }
-        foundedElement?.let { foundedAlbum: Album ->
-            return StateData.success(foundedAlbum)
+        foundElement?.let { foundAlbum: Album ->
+            return StateData.success(foundAlbum)
         }
         return StateData.error(errorMessage)
     }
