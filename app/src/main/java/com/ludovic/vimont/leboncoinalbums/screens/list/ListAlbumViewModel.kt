@@ -18,6 +18,10 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
     private val allAlbums = ArrayList<Album>()
     val albums = MutableLiveData<StateData<List<Album>>>()
 
+    /**
+     * After receiving the data from the server, we keep them in memory and provide a progressive load
+     * using a sublist.
+     */
     fun loadAlbums() {
         viewModelScope.launch(dispatcher) {
             if (allAlbums.isEmpty()) {
@@ -47,6 +51,9 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
         return allAlbums.isEmpty()
     }
 
+    /**
+     * We load, the next batch of data based on the user progression while scrolling the RecyclerView
+     */
     fun loadNextPageList() {
         if (fromIndex < allAlbums.size) {
             val newIndex: Int = fromIndex + ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE

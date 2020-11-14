@@ -2,6 +2,9 @@ package com.ludovic.vimont.data.source
 
 import com.ludovic.vimont.data.model.Album
 
+/**
+ * Provide a way to map an Album from the domain module to the data module
+ */
 typealias AlbumEntity = com.ludovic.vimont.domain.entities.Album
 
 fun Album.asEntity() = AlbumEntity(

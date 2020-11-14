@@ -7,8 +7,15 @@ import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.repositories.AlbumRepository
 import retrofit2.Response
 
+/**
+ * Implementation of the class AlbumRepository from the domain module.
+ * We use Retrofit to get data from the server and Room to persist the received data.
+ */
 class AlbumRepositoryImpl(private val albumAPI: AlbumAPI,
                           private val albumDao: AlbumDao): AlbumRepository {
+    /**
+     * After the first fetch from the server, we use the database as reference.
+     */
     override suspend fun getAlbums(isRefreshNeeded: Boolean): StateData<List<Album>> {
         val albums = ArrayList<Album>()
         if (isRefreshNeeded || albumDao.count() <= 0) {

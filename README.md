@@ -22,7 +22,7 @@ To be able to provide a great user experience when loading or when an error occu
 
 To find the logo to display the current state of my adapter list, I used the website [Undraw](https://undraw.co/).
 
-Last, but not least I found my launcher icon [here](https://pixabay.com/illustrations/gallery-image-icon-album-3381283/).
+Last, but not least I founded my launcher icon on [pixabay](https://pixabay.com/illustrations/gallery-image-icon-album-3381283/).
 
 
 ## Architecture
