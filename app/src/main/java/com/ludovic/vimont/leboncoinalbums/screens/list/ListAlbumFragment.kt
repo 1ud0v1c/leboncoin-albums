@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
@@ -100,12 +101,14 @@ class ListAlbumFragment: Fragment() {
 
     private fun showSuccessStatus(albums: List<Album>) {
         with(binding) {
-            ViewHelper.fadeOutAnimation(linearLayoutStateContainer, {
-                linearLayoutStateContainer.visibility = View.GONE
-            })
-            ViewHelper.fadeInAnimation(recyclerViewAlbums, {
-                recyclerViewAlbums.visibility = View.VISIBLE
-            })
+            if (linearLayoutStateContainer.isVisible) {
+                ViewHelper.fadeOutAnimation(linearLayoutStateContainer, {
+                    linearLayoutStateContainer.visibility = View.GONE
+                })
+                ViewHelper.fadeInAnimation(recyclerViewAlbums, {
+                    recyclerViewAlbums.visibility = View.VISIBLE
+                })
+            }
             adapter.setItems(albums)
         }
     }

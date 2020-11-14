@@ -7,17 +7,19 @@ import com.ludovic.vimont.domain.common.DataStatus
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.usecases.LoadAlbumsListUseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCase): ViewModel() {
+class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCase,
+                         private val dispatcher: CoroutineDispatcher = Dispatchers.Default): ViewModel() {
     private var fromIndex: Int = 0
     private val currentAlbums = ArrayList<Album>()
     private val allAlbums = ArrayList<Album>()
     val albums = MutableLiveData<StateData<List<Album>>>()
 
     fun loadAlbums() {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(dispatcher) {
             if (allAlbums.isEmpty()) {
                 albums.postValue(StateData.loading())
                 val result: StateData<List<Album>> = loadAlbumsListUseCase.execute(false)

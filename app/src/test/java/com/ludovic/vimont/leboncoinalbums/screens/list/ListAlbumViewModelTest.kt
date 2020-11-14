@@ -6,14 +6,13 @@ import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.usecases.LoadAlbumsListUseCase
 import com.ludovic.vimont.leboncoinalbums.screens.FakeAlbumRepositoryImpl
+import com.ludovic.vimont.leboncoinalbums.screens.LifeCycleTestOwner
+import com.ludovic.vimont.leboncoinalbums.screens.getOrAwaitValue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import org.junit.*
-import org.junit.runner.RunWith
-import org.mockito.Mockito
-import org.mockito.Mockito.atLeastOnce
-import org.mockito.junit.MockitoJUnitRunner
 
-@RunWith(MockitoJUnitRunner::class)
 class ListAlbumViewModelTest {
     companion object {
         const val LIST_SIZE = 5_000
@@ -21,43 +20,49 @@ class ListAlbumViewModelTest {
     @get:Rule
     val instantTaskExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
+    private lateinit var lifeCycleTestOwner: LifeCycleTestOwner
     private val fakeAlbumRepositoryImpl = FakeAlbumRepositoryImpl(LIST_SIZE)
     private lateinit var viewModel: ListAlbumViewModel
     private lateinit var observer: Observer<StateData<List<Album>>>
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
-        observer = Mockito.mock(Observer::class.java) as Observer<StateData<List<Album>>>
-        viewModel = ListAlbumViewModel(LoadAlbumsListUseCase(fakeAlbumRepositoryImpl))
+        lifeCycleTestOwner = LifeCycleTestOwner()
+        lifeCycleTestOwner.onCreate()
+        observer = Observer {}
+        viewModel = ListAlbumViewModel(LoadAlbumsListUseCase(fakeAlbumRepositoryImpl), TestCoroutineDispatcher())
         viewModel.albums.observeForever(observer)
+    }
+
+    @After
+    fun tearDown() {
+        lifeCycleTestOwner.onDestroy()
     }
 
     @Test
     fun testLoadAlbums() = runBlocking {
         viewModel.loadAlbums()
-        Mockito.verify(observer).onChanged(StateData.loading())
-        Mockito.verify(observer).onChanged(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)))
+        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
 
         viewModel.loadAlbums()
-        Mockito.verify(observer, atLeastOnce()).onChanged(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)))
+        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
     }
 
     @Test
     fun testIsAlbumsNotLoaded() = runBlocking {
         Assert.assertTrue(viewModel.isAlbumsNotLoaded())
         viewModel.loadAlbums()
-        Mockito.verify(observer).onChanged(StateData.loading())
-        Mockito.verify(observer).onChanged(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)))
+        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
         Assert.assertFalse(viewModel.isAlbumsNotLoaded())
     }
 
     @Test
     fun testLoadNextPage() = runBlocking {
         viewModel.loadAlbums()
-        Mockito.verify(observer).onChanged(StateData.loading())
-        Mockito.verify(observer).onChanged(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)))
+        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
 
         viewModel.loadNextPageList()
-        Mockito.verify(observer, atLeastOnce()).onChanged(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 30)))
+        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 30)), viewModel.albums.getOrAwaitValue())
     }
 }

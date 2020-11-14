@@ -6,46 +6,51 @@ import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.usecases.LoadAlbumUseCase
 import com.ludovic.vimont.leboncoinalbums.screens.FakeAlbumRepositoryImpl
+import com.ludovic.vimont.leboncoinalbums.screens.LifeCycleTestOwner
+import com.ludovic.vimont.leboncoinalbums.screens.getOrAwaitValue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnitRunner
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import org.junit.*
 
-@RunWith(MockitoJUnitRunner::class)
 class DetailViewModelTest {
     @get:Rule
     val instantTaskExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
+    private lateinit var lifeCycleTestOwner: LifeCycleTestOwner
     private val fakeAlbumRepositoryImpl = FakeAlbumRepositoryImpl()
     private lateinit var viewModel: DetailViewModel
+    private lateinit var lastStateData: StateData<Album>
     private lateinit var observer: Observer<StateData<Album>>
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
-        observer = Mockito.mock(Observer::class.java) as Observer<StateData<Album>>
-        viewModel = DetailViewModel(LoadAlbumUseCase(fakeAlbumRepositoryImpl))
-        viewModel.album.observeForever(observer)
+        lifeCycleTestOwner = LifeCycleTestOwner()
+        lifeCycleTestOwner.onCreate()
+        observer = Observer {}
+        viewModel = DetailViewModel(LoadAlbumUseCase(fakeAlbumRepositoryImpl), TestCoroutineDispatcher())
+        viewModel.album.observe(lifeCycleTestOwner, observer)
+    }
+
+    @After
+    fun tearDown() {
+        lifeCycleTestOwner.onDestroy()
     }
 
     @Test
-    fun testLoadAlbum() = runBlocking {
+    fun testLoadAlbum(): Unit = runBlocking {
+        lifeCycleTestOwner.onResume()
         val lastItemId: Int = fakeAlbumRepositoryImpl.count()
         viewModel.loadAlbum(lastItemId)
-        Mockito.verify(observer).onChanged(StateData.loading())
-        Mockito.verify(observer).onChanged(StateData.success(fakeAlbumRepositoryImpl.lastAlbum()))
+        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.lastAlbum()), viewModel.album.getOrAwaitValue())
     }
 
     @Test
     fun testLoadNotExistingAlbum() = runBlocking {
+        lifeCycleTestOwner.onResume()
         val albumId = 1500
         viewModel.loadAlbum(albumId)
-        Mockito.verify(observer).onChanged(StateData.loading())
-        Mockito.verify(observer).onChanged(StateData.error(fakeAlbumRepositoryImpl.errorMessage()))
+        Assert.assertEquals(StateData.error<Album>(fakeAlbumRepositoryImpl.errorMessage()), viewModel.album.getOrAwaitValue())
     }
 }

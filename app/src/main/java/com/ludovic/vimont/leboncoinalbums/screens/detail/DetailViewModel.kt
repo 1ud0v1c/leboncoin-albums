@@ -6,14 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.usecases.LoadAlbumUseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DetailViewModel(private val loadAlbumUseCase: LoadAlbumUseCase): ViewModel() {
+class DetailViewModel(private val loadAlbumUseCase: LoadAlbumUseCase,
+                      private val dispatcher: CoroutineDispatcher = Dispatchers.Default): ViewModel() {
     val album = MutableLiveData<StateData<Album>>()
 
     fun loadAlbum(albumId: Int) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(dispatcher) {
             album.postValue(StateData.loading())
             val result: StateData<Album> = loadAlbumUseCase.execute(albumId)
             album.postValue(result)
