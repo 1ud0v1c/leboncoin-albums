@@ -44,3 +44,13 @@ since I saw [that talk](https://www.youtube.com/watch?time_continue=2526&v=1Pwdq
 - To load image, I picked [Coil](https://github.com/coil-kt/coil), which released the 1.0 recently. I liked it, because the library is smaller than Glide & Picasso & the library is backed by Kotlin Coroutines.
 - [Koin](https://github.com/InsertKoinIO/koin): I used Koin for dependency injection.
 - I used [Barista](https://github.com/AdevintaSpain/Barista) to ease my UI tests writing.
+
+
+## What went wrong during the test
+
+- I had issues with Android KitKat, the library OkHttp [dropped the support of Android 4.4](https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce) in the latest version. So to be able to
+have Retrofit working I needed to update & force the version of the library.
+- I encounter some issues while testing the ViewModels classes, I tried to make an implementation based on [Mockito](https://site.mockito.org/). The result was working but the tests were flaky, they were failing half the
+time. The solution was pretty simple, by adding the CoroutineDispatcher used by the ViewModel into the constructor, I was able to used my own Dispatcher for the test and thus succeed to execute more easily and remove
+Mockito.
+ 
