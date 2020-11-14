@@ -16,11 +16,18 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
     private val allAlbums = ArrayList<Album>()
     val albums = MutableLiveData<StateData<List<Album>>>()
 
+    init {
+        println("allAlbums size: ${allAlbums.size}")
+        println("currentAlbums size: ${currentAlbums.size}")
+    }
+
     fun loadAlbums() {
         viewModelScope.launch(Dispatchers.Default) {
+            println("allAlbums.isEmpty(): ${allAlbums.isEmpty()}")
             if (allAlbums.isEmpty()) {
                 albums.postValue(StateData.loading())
                 val result: StateData<List<Album>> = loadAlbumsListUseCase.execute(false)
+                println("result.status: ${result.status}")
                 when (result.status) {
                     DataStatus.SUCCESS -> {
                         result.data?.let {
@@ -46,9 +53,15 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
     }
 
     fun loadNextPageList() {
-        val newIndex: Int = fromIndex + ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE
-        currentAlbums.addAll(allAlbums.subList(fromIndex, newIndex))
-        albums.postValue(StateData.success(currentAlbums))
-        fromIndex = newIndex
+        println("fromIndex: $fromIndex")
+        println("allAlbums.size: ${allAlbums.size}")
+        println("fromIndex < allAlbums.size.size: ${fromIndex < allAlbums.size}")
+        if (fromIndex < allAlbums.size) {
+            val newIndex: Int = fromIndex + ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE
+            currentAlbums.addAll(allAlbums.subList(fromIndex, newIndex))
+            albums.postValue(StateData.success(currentAlbums))
+            fromIndex = newIndex
+            println("currentAlbums.size: ${currentAlbums.size}")
+        }
     }
 }
