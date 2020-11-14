@@ -22,31 +22,31 @@ class AlbumRepositoryImpl(private val albumAPI: AlbumAPI,
             try {
                 val albumsResponse: Response<List<Album>> = albumAPI.getAlbums()
                 if (!albumsResponse.isSuccessful) {
-                    return StateData.error(albumsResponse.message())
+                    return StateData.Error(albumsResponse.message())
                 }
                 albumsResponse.body()?.let { receivedAlbums: List<Album> ->
                     albums.addAll(receivedAlbums)
                     albumDao.insertAll(receivedAlbums.asData())
                 }
-                return StateData.success(albums)
+                return StateData.Success(albums)
             } catch (exception: Exception) {
-                return StateData.error(exception.message.toString())
+                return StateData.Error(exception.message.toString())
             }
         } else {
             return try {
                 val cachedAlbums: List<Album> = albumDao.getAll().asEntity()
-                StateData.success(cachedAlbums)
+                StateData.Success(cachedAlbums)
             }  catch (exception: Exception) {
-                StateData.error(exception.message.toString())
+                StateData.Error(exception.message.toString())
             }
         }
     }
 
     override suspend fun getAlbum(albumId: Int): StateData<Album> {
         return try {
-            StateData.success(albumDao.getAlbum(albumId).asEntity())
+            StateData.Success(albumDao.getAlbum(albumId).asEntity())
         }  catch (exception: Exception) {
-            StateData.error(exception.message.toString())
+            StateData.Error(exception.message.toString())
         }
     }
 }

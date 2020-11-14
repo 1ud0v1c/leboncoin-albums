@@ -43,7 +43,7 @@ class DetailViewModelTest {
         lifeCycleTestOwner.onResume()
         val lastItemId: Int = fakeAlbumRepositoryImpl.count()
         viewModel.loadAlbum(lastItemId)
-        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.lastAlbum()), viewModel.album.getOrAwaitValue())
+        Assert.assertEquals(StateData.Success(fakeAlbumRepositoryImpl.lastAlbum()), viewModel.album.getOrAwaitValue())
     }
 
     @Test
@@ -51,6 +51,6 @@ class DetailViewModelTest {
         lifeCycleTestOwner.onResume()
         val albumId = 1500
         viewModel.loadAlbum(albumId)
-        Assert.assertEquals(StateData.error<Album>(fakeAlbumRepositoryImpl.errorMessage()), viewModel.album.getOrAwaitValue())
+        Assert.assertEquals(StateData.Error(fakeAlbumRepositoryImpl.errorMessage()), viewModel.album.getOrAwaitValue())
     }
 }

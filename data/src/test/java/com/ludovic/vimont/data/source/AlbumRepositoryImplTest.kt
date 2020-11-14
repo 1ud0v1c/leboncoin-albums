@@ -8,7 +8,6 @@ import com.ludovic.vimont.data.db.AlbumDao
 import com.ludovic.vimont.data.db.AlbumDatabase
 import com.ludovic.vimont.data.network.AlbumAPI
 import com.ludovic.vimont.data.network.RetrofitBuilder
-import com.ludovic.vimont.domain.common.DataStatus
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.repositories.AlbumRepository
@@ -39,9 +38,11 @@ class AlbumRepositoryImplTest {
     fun testGetAlbums() = runBlocking {
         Assert.assertEquals(0, albumDao.count())
         val stateData: StateData<List<Album>> = albumRepository.getAlbums(true)
-        Assert.assertEquals(DataStatus.SUCCESS, stateData.status)
-        Assert.assertTrue(stateData.data?.isNotEmpty() ?: false)
-        Assert.assertNotEquals(0, albumDao.count())
+        Assert.assertTrue(stateData is StateData.Success)
+        if (stateData is StateData.Success) {
+            Assert.assertTrue(stateData.data.isNotEmpty())
+            Assert.assertNotEquals(0, albumDao.count())
+        }
     }
 
     @Test
@@ -49,7 +50,7 @@ class AlbumRepositoryImplTest {
         albumAPI = FakeAlbumAPI()
         albumRepository = AlbumRepositoryImpl(albumAPI, albumDao)
         val stateData: StateData<List<Album>> = albumRepository.getAlbums(true)
-        Assert.assertEquals(DataStatus.ERROR, stateData.status)
+        Assert.assertTrue(stateData is StateData.Error)
     }
 
     @Test
@@ -59,21 +60,27 @@ class AlbumRepositoryImplTest {
         albumRepository = AlbumRepositoryImpl(albumAPI, albumDao)
 
         val stateData: StateData<List<Album>> = albumRepository.getAlbums(false)
-        Assert.assertEquals(DataStatus.SUCCESS, stateData.status)
-        Assert.assertTrue(stateData.data?.isNotEmpty() ?: false)
-        Assert.assertNotEquals(0, albumDao.count())
+        Assert.assertTrue(stateData is StateData.Success)
+        if (stateData is StateData.Success) {
+            Assert.assertTrue(stateData.data.isNotEmpty())
+            Assert.assertNotEquals(0, albumDao.count())
+        }
     }
 
     @Test
     fun testGetAlbum() = runBlocking {
         val stateData: StateData<Album> = albumRepository.getAlbum(5)
-        Assert.assertEquals(DataStatus.ERROR, stateData.status)
-        Assert.assertNull(stateData.data)
+        Assert.assertTrue(stateData is StateData.Error)
+        if (stateData is StateData.Error) {
+            Assert.assertTrue(stateData.errorMessage.isNotEmpty())
+        }
 
         albumRepository.getAlbums(true)
 
         val newStateData: StateData<Album> = albumRepository.getAlbum(5)
-        Assert.assertEquals(DataStatus.SUCCESS, newStateData.status)
-        Assert.assertNotNull(newStateData.data)
+        Assert.assertTrue(newStateData is StateData.Success)
+        if (newStateData is StateData.Success) {
+            Assert.assertNotNull(newStateData.data)
+        }
     }
 }

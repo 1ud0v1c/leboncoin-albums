@@ -16,7 +16,7 @@ class DetailViewModel(private val loadAlbumUseCase: LoadAlbumUseCase,
 
     fun loadAlbum(albumId: Int) {
         viewModelScope.launch(dispatcher) {
-            album.postValue(StateData.loading())
+            album.postValue(StateData.Loading)
             val result: StateData<Album> = loadAlbumUseCase.execute(albumId)
             album.postValue(result)
         }

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import coil.load
-import com.ludovic.vimont.domain.common.DataStatus
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.leboncoinalbums.R
@@ -39,11 +38,10 @@ class DetailFragment: Fragment() {
 
     private fun setViewModelObserver() {
         viewModel.album.observe(viewLifecycleOwner, { result: StateData<Album> ->
-            if (result.status == DataStatus.SUCCESS) {
-                result.data?.let { album: Album ->
-                    activity?.title = getString(R.string.fragment_detail_title, album.id)
-                    configureViews(album)
-                }
+            if (result is StateData.Success) {
+                val album: Album = result.data
+                activity?.title = getString(R.string.fragment_detail_title, album.id)
+                configureViews(album)
             }
         })
     }

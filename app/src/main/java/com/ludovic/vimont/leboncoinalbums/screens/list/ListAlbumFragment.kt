@@ -9,7 +9,6 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ludovic.vimont.domain.common.DataStatus
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.leboncoinalbums.R
@@ -67,18 +66,10 @@ class ListAlbumFragment: Fragment() {
 
     private fun setViewModelObserver() {
         viewModel.albums.observe(viewLifecycleOwner) { result: StateData<List<Album>> ->
-            when (result.status) {
-                DataStatus.LOADING -> {
-                    showLoadingStatus()
-                }
-                DataStatus.SUCCESS -> {
-                    result.data?.let {
-                        showSuccessStatus(it)
-                    }
-                }
-                DataStatus.ERROR -> {
-                    showErrorStatus(result.errorMessage)
-                }
+            when (result) {
+                is StateData.Loading -> showLoadingStatus()
+                is StateData.Success -> showSuccessStatus(result.data)
+                is StateData.Error -> showErrorStatus(result.errorMessage)
             }
         }
     }

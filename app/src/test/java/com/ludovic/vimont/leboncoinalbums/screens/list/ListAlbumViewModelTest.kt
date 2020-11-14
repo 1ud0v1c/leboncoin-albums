@@ -43,26 +43,26 @@ class ListAlbumViewModelTest {
     @Test
     fun testLoadAlbums() = runBlocking {
         viewModel.loadAlbums()
-        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
+        Assert.assertEquals(StateData.Success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
 
         viewModel.loadAlbums()
-        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
+        Assert.assertEquals(StateData.Success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
     }
 
     @Test
     fun testIsAlbumsNotLoaded() = runBlocking {
         Assert.assertTrue(viewModel.isAlbumsNotLoaded())
         viewModel.loadAlbums()
-        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
+        Assert.assertEquals(StateData.Success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
         Assert.assertFalse(viewModel.isAlbumsNotLoaded())
     }
 
     @Test
     fun testLoadNextPage() = runBlocking {
         viewModel.loadAlbums()
-        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
+        Assert.assertEquals(StateData.Success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 15)), viewModel.albums.getOrAwaitValue())
 
         viewModel.loadNextPageList()
-        Assert.assertEquals(StateData.success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 30)), viewModel.albums.getOrAwaitValue())
+        Assert.assertEquals(StateData.Success(fakeAlbumRepositoryImpl.getAlbums().subList(0, 30)), viewModel.albums.getOrAwaitValue())
     }
 }

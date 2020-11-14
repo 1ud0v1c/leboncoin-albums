@@ -1,19 +1,15 @@
 package com.ludovic.vimont.domain.common
 
-data class StateData<T>(val status: DataStatus,
-                        val data: T?,
-                        val errorMessage: String) {
-    companion object {
-        fun <T> loading(): StateData<T> {
-            return StateData(DataStatus.LOADING, null, "")
-        }
+sealed class StateData<out R> {
+    data class Success<out T>(val data: T) : StateData<T>()
+    data class Error(val errorMessage: String) : StateData<Nothing>()
+    object Loading : StateData<Nothing>()
 
-        fun <T> success(data: T?): StateData<T> {
-            return StateData(DataStatus.SUCCESS, data, "")
-        }
-
-        fun <T> error(errorMessage: String): StateData<T> {
-            return StateData(DataStatus.ERROR, null, errorMessage)
+    override fun toString(): String {
+        return when (this) {
+            is Success<*> -> "Success[data=$data]"
+            is Error -> "Error[errorMessage=$errorMessage]"
+            Loading -> "Loading"
         }
     }
 }

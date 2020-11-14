@@ -1,7 +1,6 @@
 package com.ludovic.vimont.domain.usescases
 
 import com.ludovic.vimont.domain.FakeAlbumRepository
-import com.ludovic.vimont.domain.common.DataStatus
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.usecases.LoadAlbumsListUseCase
@@ -22,13 +21,17 @@ class LoadAlbumsListUseCaseTest {
     @Test
     fun testGetListOfAlbums() = runBlocking {
         val stateData: StateData<List<Album>> = loadAlbumsListUseCase.execute(false)
-        Assert.assertEquals(DataStatus.SUCCESS, stateData.status)
-        Assert.assertEquals(FakeAlbumRepository.ALBUMS_LIST_SIZE, stateData.data?.size)
+        Assert.assertTrue(stateData is StateData.Success)
+        if (stateData is StateData.Success) {
+            Assert.assertEquals(FakeAlbumRepository.ALBUMS_LIST_SIZE, stateData.data.size)
+        }
 
         albumRepository.hasNetworkErrorOccurred = true
 
         val newStateData: StateData<List<Album>> = loadAlbumsListUseCase.execute(false)
-        Assert.assertEquals(DataStatus.ERROR, newStateData.status)
-        Assert.assertNull(newStateData.data)
+        Assert.assertTrue(newStateData is StateData.Error)
+        if (newStateData is StateData.Error) {
+            Assert.assertEquals(FakeAlbumRepository.GET_NETWORK_ERROR_MESSAGE, newStateData.errorMessage)
+        }
     }
 }

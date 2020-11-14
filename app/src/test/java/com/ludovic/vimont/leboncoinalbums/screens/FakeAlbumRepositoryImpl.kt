@@ -27,7 +27,7 @@ class FakeAlbumRepositoryImpl(albumListSize: Int = 5) : AlbumRepository {
     }
 
     override suspend fun getAlbums(isRefreshNeeded: Boolean): StateData<List<Album>> {
-        return StateData.success(albums)
+        return StateData.Success(albums)
     }
 
     override suspend fun getAlbum(albumId: Int): StateData<Album> {
@@ -35,9 +35,9 @@ class FakeAlbumRepositoryImpl(albumListSize: Int = 5) : AlbumRepository {
             album.id == albumId
         }
         foundElement?.let { foundAlbum: Album ->
-            return StateData.success(foundAlbum)
+            return StateData.Success(foundAlbum)
         }
-        return StateData.error(errorMessage)
+        return StateData.Error(errorMessage)
     }
 
     fun count(): Int {

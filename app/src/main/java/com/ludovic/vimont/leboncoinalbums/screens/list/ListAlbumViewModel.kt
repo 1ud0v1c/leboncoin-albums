@@ -3,7 +3,6 @@ package com.ludovic.vimont.leboncoinalbums.screens.list
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ludovic.vimont.domain.common.DataStatus
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.usecases.LoadAlbumsListUseCase
@@ -25,24 +24,22 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
     fun loadAlbums() {
         viewModelScope.launch(dispatcher) {
             if (allAlbums.isEmpty()) {
-                albums.postValue(StateData.loading())
-                val result: StateData<List<Album>> = loadAlbumsListUseCase.execute(false)
-                when (result.status) {
-                    DataStatus.SUCCESS -> {
-                        result.data?.let {
+                albums.postValue(StateData.Loading)
+                when (val result: StateData<List<Album>> = loadAlbumsListUseCase.execute(false)) {
+                    is StateData.Success -> {
+                        result.data.let {
                             allAlbums.addAll(it)
                             currentAlbums.addAll(allAlbums.subList(fromIndex, ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE))
-                            albums.postValue(StateData.success(currentAlbums))
+                            albums.postValue(StateData.Success(currentAlbums))
                             fromIndex = ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE
                         }
                     }
-                    DataStatus.ERROR -> {
+                    is StateData.Error -> {
                         albums.postValue(result)
                     }
-                    else -> { }
                 }
             } else {
-                albums.postValue(StateData.success(currentAlbums))
+                albums.postValue(StateData.Success(currentAlbums))
             }
         }
     }
@@ -58,7 +55,7 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
         if (fromIndex < allAlbums.size) {
             val newIndex: Int = fromIndex + ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE
             currentAlbums.addAll(allAlbums.subList(fromIndex, newIndex))
-            albums.postValue(StateData.success(currentAlbums))
+            albums.postValue(StateData.Success(currentAlbums))
             fromIndex = newIndex
         }
     }
