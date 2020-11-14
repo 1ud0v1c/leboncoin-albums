@@ -80,4 +80,9 @@ dependencies {
     // UI test
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation('com.schibsted.spain:barista:3.7.0') {
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    androidTestImplementation "androidx.navigation:navigation-testing:2.3.1"
 }

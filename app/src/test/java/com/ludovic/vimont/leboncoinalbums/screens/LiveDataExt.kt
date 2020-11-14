@@ -8,9 +8,7 @@ import java.util.concurrent.TimeoutException
 
 /**
  * Gets the value of a [LiveData] or waits for it to have one, with a timeout.
- *
- * Use this extension from host-side (JVM) tests. It's recommended to use it alongside
- * `InstantTaskExecutorRule` or a similar mechanism to execute tasks synchronously.
+ * @see: https://medium.com/androiddevelopers/unit-testing-livedata-and-other-common-observability-problems-bb477262eb04
  */
 fun <T> LiveData<T>.getOrAwaitValue(
     time: Long = 2,

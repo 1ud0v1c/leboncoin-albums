@@ -101,14 +101,12 @@ class ListAlbumFragment: Fragment() {
 
     private fun showSuccessStatus(albums: List<Album>) {
         with(binding) {
-            if (linearLayoutStateContainer.isVisible) {
-                ViewHelper.fadeOutAnimation(linearLayoutStateContainer, {
-                    linearLayoutStateContainer.visibility = View.GONE
-                })
-                ViewHelper.fadeInAnimation(recyclerViewAlbums, {
-                    recyclerViewAlbums.visibility = View.VISIBLE
-                })
-            }
+            ViewHelper.fadeOutAnimation(linearLayoutStateContainer, {
+                linearLayoutStateContainer.visibility = View.GONE
+            })
+            ViewHelper.fadeInAnimation(recyclerViewAlbums, {
+                recyclerViewAlbums.visibility = View.VISIBLE
+            })
             adapter.setItems(albums)
         }
     }
