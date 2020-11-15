@@ -1,6 +1,7 @@
 package com.ludovic.vimont.leboncoinalbums.screens.list
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ludovic.vimont.domain.common.StateData
@@ -11,8 +12,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCase,
+                         private val savedStateHandle: SavedStateHandle,
                          private val dispatcher: CoroutineDispatcher = Dispatchers.Default): ViewModel() {
+    companion object {
+        const val KEY_LAST_INDEX_USED = "KEY_LAST_INDEX_USED"
+    }
     private var fromIndex: Int = 0
+    private var lastIndexUsed: Int = savedStateHandle[KEY_LAST_INDEX_USED] ?: -1
     private val currentAlbums = ArrayList<Album>()
     private val allAlbums = ArrayList<Album>()
     val albums = MutableLiveData<StateData<List<Album>>>()
@@ -29,9 +35,11 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
                     is StateData.Success -> {
                         result.data.let {
                             allAlbums.addAll(it)
-                            currentAlbums.addAll(allAlbums.subList(fromIndex, ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE))
+                            val toIndex: Int = if (lastIndexUsed != -1) lastIndexUsed else ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE
+                            currentAlbums.addAll(allAlbums.subList(fromIndex, toIndex))
                             albums.postValue(StateData.Success(currentAlbums))
-                            fromIndex = ListAlbumFragment.NUMBER_OF_ITEMS_PER_PAGE
+                            fromIndex = toIndex
+                            savedStateHandle[KEY_LAST_INDEX_USED] = fromIndex
                         }
                     }
                     is StateData.Error -> {
@@ -57,6 +65,7 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
             currentAlbums.addAll(allAlbums.subList(fromIndex, newIndex))
             albums.postValue(StateData.Success(currentAlbums))
             fromIndex = newIndex
+            savedStateHandle[KEY_LAST_INDEX_USED] = fromIndex
         }
     }
 }

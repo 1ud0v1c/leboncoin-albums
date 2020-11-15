@@ -53,3 +53,6 @@ have Retrofit working I needed to update & force the version of the library.
 - I encounter some issues while testing the ViewModels classes, I tried to make an implementation based on [Mockito](https://site.mockito.org/). The result was working but the tests were flaky, they were failing half the
 time. The solution was pretty simple, by adding the CoroutineDispatcher used by the ViewModel into the constructor, I was able to used my own Dispatcher for the test and thus succeed to execute more easily and remove
 Mockito.
+- I tried to use Koin 2.2.0 in the project which has [been released](https://medium.com/koin-developers/whats-next-with-koin-2-2-3-0-releases-6c5464ae5e3d) the 13 October, I tried to add a SavedStateHandle to my list
+using the new syntax (they advice to use get()), but I encountered [an exception](https://www.google.com/search?client=firefox-b-d&q=%22No+definition+found+for+class%3A%27androidx.lifecycle.SavedStateHandle%27.%22) by
+doing so. So I downgraded the [version to the 2.1.6](https://medium.com/koin-developers/unboxing-koin-2-1-7f1133ebb790), where the syntax is a bit different but works pretty well !

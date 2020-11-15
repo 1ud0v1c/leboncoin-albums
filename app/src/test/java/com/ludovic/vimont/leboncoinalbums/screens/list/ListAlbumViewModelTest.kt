@@ -2,6 +2,7 @@ package com.ludovic.vimont.leboncoinalbums.screens.list
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.lifecycle.SavedStateHandle
 import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.domain.usecases.LoadAlbumsListUseCase
@@ -31,7 +32,7 @@ class ListAlbumViewModelTest {
         lifeCycleTestOwner = LifeCycleTestOwner()
         lifeCycleTestOwner.onCreate()
         observer = Observer {}
-        viewModel = ListAlbumViewModel(LoadAlbumsListUseCase(fakeAlbumRepositoryImpl), TestCoroutineDispatcher())
+        viewModel = ListAlbumViewModel(LoadAlbumsListUseCase(fakeAlbumRepositoryImpl), SavedStateHandle(), TestCoroutineDispatcher())
         viewModel.albums.observeForever(observer)
     }
 

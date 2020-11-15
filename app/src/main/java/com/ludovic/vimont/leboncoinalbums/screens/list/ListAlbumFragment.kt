@@ -15,14 +15,14 @@ import com.ludovic.vimont.leboncoinalbums.R
 import com.ludovic.vimont.leboncoinalbums.databinding.FragmentListAlbumsBinding
 import com.ludovic.vimont.leboncoinalbums.helper.ViewHelper
 import com.ludovic.vimont.leboncoinalbums.ui.EndlessRecyclerViewScrollListener
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class ListAlbumFragment: Fragment() {
     companion object {
         const val NUMBER_OF_ITEMS_PER_PAGE = 15
     }
     private val adapter = ListAlbumAdapter(ArrayList())
-    private val viewModel: ListAlbumViewModel by viewModel()
+    private val viewModel: ListAlbumViewModel by stateViewModel()
     private var lastStateData: StateData<List<Album>>? = null
     private lateinit var binding: FragmentListAlbumsBinding
 
@@ -35,7 +35,7 @@ class ListAlbumFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureViews()
-        if (savedInstanceState == null && viewModel.isAlbumsNotLoaded()) {
+        if (savedInstanceState == null || viewModel.isAlbumsNotLoaded()) {
             viewModel.loadAlbums()
         }
     }

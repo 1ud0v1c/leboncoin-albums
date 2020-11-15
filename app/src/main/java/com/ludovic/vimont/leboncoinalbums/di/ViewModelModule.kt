@@ -1,5 +1,6 @@
 package com.ludovic.vimont.leboncoinalbums.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.ludovic.vimont.leboncoinalbums.screens.detail.DetailViewModel
 import com.ludovic.vimont.leboncoinalbums.screens.list.ListAlbumViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -9,7 +10,7 @@ import org.koin.dsl.module
 object ViewModelModule {
     val viewModelModule: Module = module {
         viewModel {
-            ListAlbumViewModel(get())
+            (savedStateHandle: SavedStateHandle) -> ListAlbumViewModel(get(), savedStateHandle)
         }
         viewModel {
             DetailViewModel(get())
