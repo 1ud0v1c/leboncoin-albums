@@ -1,6 +1,7 @@
 package com.ludovic.vimont.leboncoinalbums.screens.detail
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ludovic.vimont.domain.common.StateData
@@ -11,7 +12,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailViewModel(private val loadAlbumUseCase: LoadAlbumUseCase,
+                      private val savedStateHandle: SavedStateHandle,
                       private val dispatcher: CoroutineDispatcher = Dispatchers.Default): ViewModel() {
+    companion object {
+        const val KEY_LAST_ALBUM_ID = "KEY_LAST_ALBUM_ID"
+    }
+    private val lastAlbumId: Int = savedStateHandle[KEY_LAST_ALBUM_ID] ?: -1
     val album = MutableLiveData<StateData<Album>>()
 
     fun loadAlbum(albumId: Int) {
@@ -19,6 +25,19 @@ class DetailViewModel(private val loadAlbumUseCase: LoadAlbumUseCase,
             album.postValue(StateData.Loading)
             val result: StateData<Album> = loadAlbumUseCase.execute(albumId)
             album.postValue(result)
+            savedStateHandle[KEY_LAST_ALBUM_ID] = albumId
+        }
+    }
+
+    fun restoreLastAlbum() {
+        viewModelScope.launch(dispatcher) {
+            if (lastAlbumId != -1) {
+                album.postValue(StateData.Loading)
+                val result: StateData<Album> = loadAlbumUseCase.execute(lastAlbumId)
+                album.postValue(result)
+            } else {
+                album.postValue(StateData.Error("Could not restore the last album..."))
+            }
         }
     }
 }

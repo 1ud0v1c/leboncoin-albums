@@ -13,7 +13,7 @@ object ViewModelModule {
             (savedStateHandle: SavedStateHandle) -> ListAlbumViewModel(get(), savedStateHandle)
         }
         viewModel {
-            DetailViewModel(get())
+            (savedStateHandle: SavedStateHandle) -> DetailViewModel(get(), savedStateHandle)
         }
     }
 }

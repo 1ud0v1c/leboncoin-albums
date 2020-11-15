@@ -11,12 +11,12 @@ import com.ludovic.vimont.domain.common.StateData
 import com.ludovic.vimont.domain.entities.Album
 import com.ludovic.vimont.leboncoinalbums.R
 import com.ludovic.vimont.leboncoinalbums.databinding.FragmentDetailAlbumBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import java.util.*
 
 class DetailFragment: Fragment() {
     private val args: DetailFragmentArgs by navArgs()
-    private val viewModel: DetailViewModel by viewModel()
+    private val viewModel: DetailViewModel by stateViewModel()
     private lateinit var binding: FragmentDetailAlbumBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -28,6 +28,8 @@ class DetailFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState == null) {
             viewModel.loadAlbum(args.albumId)
+        } else {
+            viewModel.restoreLastAlbum()
         }
     }
 
