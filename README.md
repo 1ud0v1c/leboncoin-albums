@@ -4,7 +4,9 @@
   <a href="https://android-arsenal.com/api?level=19"><img alt="API" src="https://img.shields.io/badge/API-19%2B-brightgreen.svg?style=flat"/></a>
 </p>
 
-Parsing of a Json flux to display a list of albums using clean architecture &amp; MVVM
+Request, parsing & persistence of a [Json flux](https://static.leboncoin.fr/img/shared/technical-test.json) to display a list of albums using clean architecture &amp; MVVM
+
+![Application icon launcher](https://github.com/1ud0v1c/leboncoin-albums/blob/main/images/icon-launcher.png)
 
 
 ## Design
@@ -23,6 +25,50 @@ To be able to provide a great user experience when loading or when an error occu
 To find the logo to display the current state of my adapter list, I used the website [Undraw](https://undraw.co/).
 
 Last, but not least I founded my launcher icon on [pixabay](https://pixabay.com/illustrations/gallery-image-icon-album-3381283/).
+
+
+## Implementation
+
+For, my implementation I used one single Activity with multiple fragments. To go trough the fragment I used the [navigation library](https://developer.android.com/guide/navigation/navigation-getting-started) of
+Jetpack. We have two fragments :
+- ListAlbumFragment, which correspond to the current list of albums
+- DetailAlbumFragment, which is the detail of a specific album that we can reach by clicking on an item of the previous Fragment
+
+### ListAlbumFragment
+
+For the ListAlbumFragment, I tried to provide a nice & efficient user experience, thanks to different state. As soon as, you launch the application a loading screen will appear to help the user be patient, If you
+launch the application without having internet, if you have a timeout or a server issue, you will end with a screen which gives you a way to relaunch the request.
+
+<div align="center">
+
+![Home loading screen](https://github.com/1ud0v1c/leboncoin-albums/blob/main/images/list_fragment_loading.png)
+![Home error](https://github.com/1ud0v1c/leboncoin-albums/blob/main/images/list_fragment_error.png)
+
+</div>
+
+If you have internet and the server response well, you will have a fadeOut animation hiding the loading screen and thus reveal the list of images.
+
+<div align="center">
+
+![Home listing](https://github.com/1ud0v1c/leboncoin-albums/blob/main/images/list_fragment_success.png)
+
+</div>
+
+The loading of the items is progressive, I load the data by batch of 15 items and as soon as you reach a certan amount of items the next batch is fetched. The progression and scrolling position are saved by using
+the [SavedStateHandle class](https://developer.android.com/topic/libraries/architecture/viewmodel-savedstate).
+
+
+### DetailAlbumFragment
+
+As soon as you clicked on an item for the previous list you end in the DetailAlbumFragment, which display the detail about the Album.
+
+<div align="center">
+
+![Detail album fragment](https://github.com/1ud0v1c/leboncoin-albums/blob/main/images/detail_fragment.png)
+
+</div>
+
+In the same way of the ListAlbumFragment, we save the albumId with a SavedStateHandle to be able to recover inside the DetailAlbumFragment with the good item if the application has been killed in background.
 
 
 ## Architecture
