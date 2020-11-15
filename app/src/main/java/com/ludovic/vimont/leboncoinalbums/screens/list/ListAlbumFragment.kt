@@ -23,6 +23,7 @@ class ListAlbumFragment: Fragment() {
     }
     private val adapter = ListAlbumAdapter(ArrayList())
     private val viewModel: ListAlbumViewModel by viewModel()
+    private var lastStateData: StateData<List<Album>>? = null
     private lateinit var binding: FragmentListAlbumsBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -71,52 +72,60 @@ class ListAlbumFragment: Fragment() {
                 is StateData.Success -> showSuccessStatus(result.data)
                 is StateData.Error -> showErrorStatus(result.errorMessage)
             }
+            lastStateData = result
         }
     }
 
     private fun showLoadingStatus() {
         with(binding) {
-            ViewHelper.fadeOutAnimation(recyclerViewAlbums, {
-                recyclerViewAlbums.visibility = View.GONE
-            })
-            ViewHelper.fadeInAnimation(linearLayoutStateContainer, {
-                linearLayoutStateContainer.visibility = View.VISIBLE
-            })
-            imageViewState.setImageResource(R.drawable.state_loading)
-            textViewStateTitle.text = getString(R.string.fragment_list_loading_title)
-            textViewStateDescription.text = getString(R.string.fragment_list_loading_description)
-            buttonStateAction.visibility = View.GONE
+            if (lastStateData == null || lastStateData !is StateData.Loading) {
+                ViewHelper.fadeOutAnimation(recyclerViewAlbums, {
+                    recyclerViewAlbums.visibility = View.GONE
+                })
+                ViewHelper.fadeInAnimation(linearLayoutStateContainer, {
+                    linearLayoutStateContainer.visibility = View.VISIBLE
+                })
+                imageViewState.setImageResource(R.drawable.state_loading)
+                textViewStateTitle.text = getString(R.string.fragment_list_loading_title)
+                textViewStateDescription.text = getString(R.string.fragment_list_loading_description)
+                buttonStateAction.visibility = View.GONE
+            }
         }
     }
 
     private fun showSuccessStatus(albums: List<Album>) {
         with(binding) {
-            ViewHelper.fadeOutAnimation(linearLayoutStateContainer, {
-                linearLayoutStateContainer.visibility = View.GONE
-            })
-            ViewHelper.fadeInAnimation(recyclerViewAlbums, {
-                recyclerViewAlbums.visibility = View.VISIBLE
-            })
+            if (lastStateData == null || lastStateData !is StateData.Success) {
+                ViewHelper.fadeOutAnimation(linearLayoutStateContainer, {
+                    linearLayoutStateContainer.visibility = View.GONE
+                })
+                ViewHelper.fadeInAnimation(recyclerViewAlbums, {
+                    recyclerViewAlbums.visibility = View.VISIBLE
+                })
+            }
             adapter.setItems(albums)
         }
     }
 
     private fun showErrorStatus(errorMessage: String) {
         with(binding) {
-            ViewHelper.fadeOutAnimation(recyclerViewAlbums, {
-                recyclerViewAlbums.visibility = View.GONE
-            })
-            ViewHelper.fadeInAnimation(linearLayoutStateContainer, {
-                linearLayoutStateContainer.visibility = View.VISIBLE
-            })
-            imageViewState.setImageResource(R.drawable.state_error)
-            textViewStateTitle.text = getString(R.string.fragment_list_error_title)
-            textViewStateDescription.text = errorMessage
+            if (lastStateData == null || lastStateData !is StateData.Error) {
+                ViewHelper.fadeOutAnimation(recyclerViewAlbums, {
+                    recyclerViewAlbums.visibility = View.GONE
+                })
+                ViewHelper.fadeInAnimation(linearLayoutStateContainer, {
+                    linearLayoutStateContainer.visibility = View.VISIBLE
+                })
 
-            buttonStateAction.text = getString(R.string.action_retry)
-            buttonStateAction.visibility = View.VISIBLE
-            buttonStateAction.setOnClickListener {
-                viewModel.loadAlbums()
+                imageViewState.setImageResource(R.drawable.state_error)
+                textViewStateTitle.text = getString(R.string.fragment_list_error_title)
+                textViewStateDescription.text = errorMessage
+
+                buttonStateAction.text = getString(R.string.action_retry)
+                buttonStateAction.visibility = View.VISIBLE
+                buttonStateAction.setOnClickListener {
+                    viewModel.loadAlbums()
+                }
             }
         }
     }
