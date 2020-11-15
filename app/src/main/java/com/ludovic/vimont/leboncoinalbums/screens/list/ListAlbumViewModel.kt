@@ -16,10 +16,29 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
                          private val dispatcher: CoroutineDispatcher = Dispatchers.Default): ViewModel() {
     companion object {
         const val KEY_LAST_INDEX_USED = "KEY_LAST_INDEX_USED"
+        const val KEY_LAST_SCROLL_POSITION = "KEY_LAST_SCROLL_POSITION"
     }
     private var fromIndex: Int = 0
+
+    /**
+     * Keep the last loaded index to be able to restore the complete progression of the user.
+     */
     private var lastIndexUsed: Int = savedStateHandle[KEY_LAST_INDEX_USED] ?: -1
+
+    /**
+     * The position of the last item visible while scrolling inside the RecyclerView.
+     */
+    private var lastCompletelyVisibleItemPosition: Int = savedStateHandle[KEY_LAST_SCROLL_POSITION] ?: -1
+
+    /**
+     * List used to handle the progressive loading of the result of the LoadAlbumsListUseCase.
+     */
     private val currentAlbums = ArrayList<Album>()
+
+    /**
+     * List used to store in memory the result of the LoadAlbumsListUseCase to avoid to request the
+     * server or the database for nothing.
+     */
     private val allAlbums = ArrayList<Album>()
     val albums = MutableLiveData<StateData<List<Album>>>()
 
@@ -67,5 +86,13 @@ class ListAlbumViewModel(private val loadAlbumsListUseCase: LoadAlbumsListUseCas
             fromIndex = newIndex
             savedStateHandle[KEY_LAST_INDEX_USED] = fromIndex
         }
+    }
+
+    fun getLastScrollPosition(): Int {
+        return lastCompletelyVisibleItemPosition
+    }
+
+    fun saveCurrentScrollPosition(findFirstCompletelyVisibleItemPosition: Int) {
+        savedStateHandle[KEY_LAST_SCROLL_POSITION] = findFirstCompletelyVisibleItemPosition
     }
 }

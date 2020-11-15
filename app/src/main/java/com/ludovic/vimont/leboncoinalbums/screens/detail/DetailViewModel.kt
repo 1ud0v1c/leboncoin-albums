@@ -17,7 +17,7 @@ class DetailViewModel(private val loadAlbumUseCase: LoadAlbumUseCase,
     companion object {
         const val KEY_LAST_ALBUM_ID = "KEY_LAST_ALBUM_ID"
     }
-    private val lastAlbumId: Int = savedStateHandle[KEY_LAST_ALBUM_ID] ?: -1
+    private var lastAlbumId: Int = savedStateHandle[KEY_LAST_ALBUM_ID] ?: -1
     val album = MutableLiveData<StateData<Album>>()
 
     fun loadAlbum(albumId: Int) {
@@ -25,7 +25,8 @@ class DetailViewModel(private val loadAlbumUseCase: LoadAlbumUseCase,
             album.postValue(StateData.Loading)
             val result: StateData<Album> = loadAlbumUseCase.execute(albumId)
             album.postValue(result)
-            savedStateHandle[KEY_LAST_ALBUM_ID] = albumId
+            lastAlbumId = albumId
+            savedStateHandle[KEY_LAST_ALBUM_ID] = lastAlbumId
         }
     }
 

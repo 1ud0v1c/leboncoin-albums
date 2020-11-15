@@ -27,12 +27,13 @@ Last, but not least I founded my launcher icon on [pixabay](https://pixabay.com/
 
 ## Architecture
 
-For this test, I tried to use a [clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) following [this example](https://fernandocejas.com/2018/05/07/architecting-android-reloaded/).
-The main objective is to be able to have a great separation of concerns and thus improve the testability of the code. To do so, I have divided this project in 3 layers :
+For this test, I tried to use a [clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) following [this example](https://fernandocejas.com/2018/05/07/architecting-android-reloaded/)
+and [this article](https://medium.com/blablacar/the-more-devs-the-merrier-part-1-e3fd041c0a10). The main objective is to be able to have a great separation of concerns and thus improve the testability of the code.
+To do so, I have divided this project in 3 layers :
 
 - **Domain Layer**: The domain package, which is responsible for handling pure Business Logic and defining Entities representing our business models.
 - **Data Layer**: The Data modules will implement the interfaces defined in the Domain layer.
-- **Presentation Layer**: The presentation module will contain our activities/fragments. For the presentation layer I used an [MVVM architecture](https://developer.android.com/jetpack/guide).
+- **Presentation Layer**: The presentation module which contains our activities/fragments. For the presentation layer I used an [MVVM architecture](https://developer.android.com/jetpack/guide).
 
 
 ## External dependencies
@@ -56,3 +57,12 @@ Mockito.
 - I was using Koin 2.2.0 in the project which has [been released](https://medium.com/koin-developers/whats-next-with-koin-2-2-3-0-releases-6c5464ae5e3d) the 13 October, I tried to add a SavedStateHandle to my list
 using the new syntax (they advice to use get() as usual), but I encountered [an exception](https://www.google.com/search?client=firefox-b-d&q=%22No+definition+found+for+class%3A%27androidx.lifecycle.SavedStateHandle%27.%22) by
 doing so. So I downgraded the [version to the 2.1.6](https://medium.com/koin-developers/unboxing-koin-2-1-7f1133ebb790), where the syntax is a bit different, but works pretty well !
+
+
+## Interesting links read during the test
+
+During the test, I read several interresing things like :
+
+- The [next release](https://medium.com/androiddevelopers/restore-recyclerview-scroll-position-a8fbdc9a9334) of the RecyclerView library (1.2.0-alpha6 for now) will be able to restore the scrolling position directly,
+no need to handle it by ourselves.
+- An [article](https://dev.to/adevintaspain/making-android-ui-testing-enjoyable-3a1n) by the developer of Barista to explain his adventure with Android UI tests.

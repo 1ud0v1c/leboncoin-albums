@@ -26,7 +26,11 @@ class ListAlbumFragment: Fragment() {
     private var lastStateData: StateData<List<Album>>? = null
     private lateinit var binding: FragmentListAlbumsBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentListAlbumsBinding.inflate(inflater, container, false)
         activity?.title = getString(R.string.fragment_list_title)
         return binding.root
@@ -50,7 +54,9 @@ class ListAlbumFragment: Fragment() {
             val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             recyclerViewAlbums.layoutManager = layoutManager
             recyclerViewAlbums.adapter = adapter
-            val endlessRecyclerViewScrollListener = object: EndlessRecyclerViewScrollListener(layoutManager) {
+            val endlessRecyclerViewScrollListener = object: EndlessRecyclerViewScrollListener(
+                layoutManager
+            ) {
                 override fun onLoadMore(currentPage: Int) {
                     viewModel.loadNextPageList()
                 }
@@ -58,7 +64,9 @@ class ListAlbumFragment: Fragment() {
             recyclerViewAlbums.addOnScrollListener(endlessRecyclerViewScrollListener)
             adapter.onItemClick = { albumId: Int ->
                 activity?.let {
-                    val action: NavDirections = ListAlbumFragmentDirections.actionListAlbumFragmentToDetailFragment(albumId)
+                    val action: NavDirections = ListAlbumFragmentDirections.actionListAlbumFragmentToDetailFragment(
+                        albumId
+                    )
                     findNavController().navigate(action)
                 }
             }
@@ -104,6 +112,10 @@ class ListAlbumFragment: Fragment() {
                 })
             }
             adapter.setItems(albums)
+            val lastScrollPosition: Int = viewModel.getLastScrollPosition()
+            if (lastScrollPosition != -1) {
+                recyclerViewAlbums.layoutManager?.scrollToPosition(lastScrollPosition)
+            }
         }
     }
 
@@ -127,6 +139,14 @@ class ListAlbumFragment: Fragment() {
                     viewModel.loadAlbums()
                 }
             }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val layoutManager: RecyclerView.LayoutManager? = binding.recyclerViewAlbums.layoutManager
+        if (layoutManager is LinearLayoutManager) {
+            viewModel.saveCurrentScrollPosition(layoutManager.findFirstCompletelyVisibleItemPosition())
         }
     }
 }
