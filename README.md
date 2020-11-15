@@ -6,8 +6,11 @@
 
 Request, parsing & persistence of a [Json flux](https://static.leboncoin.fr/img/shared/technical-test.json) to display a list of albums using clean architecture &amp; MVVM
 
+<div align="center">
+
 ![Application icon launcher](https://github.com/1ud0v1c/leboncoin-albums/blob/main/images/icon-launcher.png)
 
+</div>
 
 ## Design
 
